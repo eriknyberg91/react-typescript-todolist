@@ -11,12 +11,9 @@ function App() {
     }
       
     const [todos, setTodos] = useState<ToDo[]>([])
-    const [completedTodos, setCompletedTodos] = useState<ToDo[]>([])
-
     const [userInput, setUserInput] = useState<string>("")
 
     const addToDo = () => {
-      
       const newToDo : ToDo = {id: todos.length, title: userInput, completed: false}
        {newToDo.title === "" ? alert("No empty titles!") : setTodos([...todos, newToDo]) }
       setUserInput("")
@@ -28,13 +25,22 @@ function App() {
       }))
     }
     
-    const completeToDo = (x : ToDo) => {
+    const completeToDo = (x : number) => {
+      setTodos(
       todos.map((todo) => {
-        todo.id === x.id ? setCompletedTodos([...completedTodos, x]) : alert("Error!")
+        if (todo.id === x) {
+          return {...todo, completed: !todo.completed};
+        }
+        return todo;
       })
-      deleteToDo(x.id)
-      
-    }  
+      )
+    }
+    
+    const clearToDos = () => {
+      setTodos(todos.filter((todo) => {
+        return !todo.completed
+      }))
+    }
 
 
       return <>
@@ -52,24 +58,19 @@ function App() {
           <h3>To do</h3>
           {todos.map((todo) => (
             <div className="todolist-todo">
-              <p  key={todo.id}>{todo.title}</p>
-              <button onClick={() => completeToDo(todo)}>Complete</button>
+              <p 
+              key={todo.id}
+              style={{textDecoration: todo.completed ? "line-through" : "none"}}
+              >{todo.title}</p>
+              <button onClick={() => completeToDo(todo.id)}>Complete</button>
               <button onClick={() => deleteToDo(todo.id)}>Delete</button>
-            </div>  
+            </div> 
+            
+            
           ))}
-        </div>
-
-        <div className="completedtodo-container">
-          <h3>Completed todos</h3>
-          {completedTodos.map((todo) => (
-            <div className="todolist-todo">
-              <p key={todo.id}>{todo.title}</p>
-            </div>  
-          ))}
-        </div>
-        
-
-        
+          
+        </div> 
+        <button onClick={() => clearToDos()}>Clear completed todos</button>    
       </div>
       </>
 }
