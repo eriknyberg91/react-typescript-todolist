@@ -1,14 +1,12 @@
 import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { ToDo } from './interfaces.tsx/ITodo';
+import ToDoCard from './components/TodoCard';
+import { title } from 'process';
 
-function App() {
-      
-    interface ToDo {
-      title: string,
-      id: number,
-      completed: boolean
-    }
+
+function App() {   
       
     const [todos, setTodos] = useState<ToDo[]>([])
     const [userInput, setUserInput] = useState<string>("")
@@ -48,22 +46,26 @@ function App() {
         
         <h1>ToDoList</h1>
         
-        
+         <div className="userinput-container">
           <h3>Add something to do</h3>
           <input type="text" value={userInput} id="userAddToDo" onChange={(e) => setUserInput(e.currentTarget.value)} />
           <button onClick={addToDo}>Add</button>
+        </div> 
+
+        
         
 
         <div className="todolist-container">
           <h3>To do</h3>
           {todos.map((todo) => (
             <div className="todolist-todo">
-              <p 
-              key={todo.id}
-              style={{textDecoration: todo.completed ? "line-through" : "none"}}
-              >{todo.title}</p>
-              <button onClick={() => completeToDo(todo.id)}>Complete</button>
-              <button onClick={() => deleteToDo(todo.id)}>Delete</button>
+              <ToDoCard 
+              
+              todo={todo}
+              completeToDo={() =>completeToDo(todo.id)}
+              deleteToDo={() =>deleteToDo(todo.id)}
+                
+              ></ToDoCard>
             </div> 
             
             
